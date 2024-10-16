@@ -1,12 +1,10 @@
-package com.dodream.study.entity;
+package com.dodream.book.entity;
 
-import com.dodream.common.enumtype.Category;
+import com.dodream.book.entity.Book;
 import com.dodream.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,41 +21,37 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@Entity
-@Table(name = "study")
-@EntityListeners(AuditingEntityListener.class)
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
+@Table(name = "book_comment")
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class Study {
+public class BookComment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false)
     private Long id;
 
+    @Column(nullable = false)
+    private String comment;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "book_id", nullable = false)
+    private Book book;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @Column(nullable = false)
-    private String title;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private Category category = Category.CATEGORY_ETC;
-
-    @Column(nullable = false)
-    private String description;
-
     @CreatedDate
-    @Column(name = "created_at")
+    @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "updated_at")
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
 }

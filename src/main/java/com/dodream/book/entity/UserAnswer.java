@@ -1,12 +1,10 @@
-package com.dodream.study.entity;
+package com.dodream.book.entity;
 
-import com.dodream.common.enumtype.Category;
 import com.dodream.user.entity.User;
+import com.dodream.book.enumtype.Evaluation;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,34 +21,33 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@Entity
-@Table(name = "study")
-@EntityListeners(AuditingEntityListener.class)
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
+@Table(name = "user_answer")
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class Study {
+public class UserAnswer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false)
     private Long id;
 
+    @Column(nullable = false, length = 1000)
+    private String answer;
+
+    @Column(nullable = false)
+    private Evaluation evaluation = Evaluation.EVALUATION_BEFORE;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "question_id", nullable = false)
+    private Question question;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
-
-    @Column(nullable = false)
-    private String title;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private Category category = Category.CATEGORY_ETC;
-
-    @Column(nullable = false)
-    private String description;
 
     @CreatedDate
     @Column(name = "created_at")

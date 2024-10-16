@@ -1,12 +1,10 @@
 package com.dodream.study.entity;
 
-import com.dodream.common.enumtype.Category;
+import com.dodream.study.entity.Notice;
 import com.dodream.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,41 +21,37 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@Entity
-@Table(name = "study")
-@EntityListeners(AuditingEntityListener.class)
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
+@Table(name = "notice_comment")
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class Study {
+public class NotiComment {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(updatable = false)
-    private Long id;
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   @Column(updatable = false)
+   private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
+   private User user;
 
-    @Column(nullable = false)
-    private String title;
+   @ManyToOne(fetch = FetchType.LAZY)
+   @JoinColumn(name = "notice_id", referencedColumnName = "id", nullable = false)
+   private Notice notice;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private Category category = Category.CATEGORY_ETC;
+   @Column(nullable = false)
+   private String content;
 
-    @Column(nullable = false)
-    private String description;
+   @CreatedDate
+   @Column(name = "created_at")
+   private LocalDateTime createdAt;
 
-    @CreatedDate
-    @Column(name = "created_at")
-    private LocalDateTime createdAt;
-
-    @LastModifiedDate
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+   @LastModifiedDate
+   @Column(name = "updated_at")
+   private LocalDateTime updatedAt;
 
 }

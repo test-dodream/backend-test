@@ -1,12 +1,10 @@
 package com.dodream.study.entity;
 
-import com.dodream.common.enumtype.Category;
+import com.dodream.study.entity.StudyUserAnswer;
 import com.dodream.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -23,41 +21,36 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@Entity
-@Table(name = "study")
-@EntityListeners(AuditingEntityListener.class)
-@AllArgsConstructor
-@NoArgsConstructor
 @Getter
+@Table(name = "question_comment")
+@Entity
+@EntityListeners(AuditingEntityListener.class)
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class Study {
-
+public class QueComment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false)
-    private Long id;
+    private Long id; // ID
 
+    @JoinColumn(name = "user_id",nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    private User user; // 댓글을 작성한 사용자 ID
+
+    @JoinColumn(name = "study_answer_id",nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+    private StudyUserAnswer studyAnswer; // 스터디에 추가한 문제 ID
 
     @Column(nullable = false)
-    private String title;
-
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    @Builder.Default
-    private Category category = Category.CATEGORY_ETC;
-
-    @Column(nullable = false)
-    private String description;
+    private String content; // 댓글 내용
 
     @CreatedDate
     @Column(name = "created_at")
-    private LocalDateTime createdAt;
+    private LocalDateTime createdAt; // 댓글 생성 날짜
 
     @LastModifiedDate
-    @Column(name = "updated_at")
-    private LocalDateTime updatedAt;
+    @Column(name = "updated_at", nullable = false)
+    private LocalDateTime updatedAt; // 댓글 수정 날짜
 
 }
